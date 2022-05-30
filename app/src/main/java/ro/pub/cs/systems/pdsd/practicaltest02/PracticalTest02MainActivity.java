@@ -12,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import ro.pub.cs.systems.pdsd.practicaltest02.general.Constants;
+import ro.pub.cs.systems.pdsd.practicaltest02.network.ClientThread;
+import ro.pub.cs.systems.pdsd.practicaltest02.network.ServerThread;
 
 public class PracticalTest02MainActivity extends AppCompatActivity {
 
@@ -23,13 +25,12 @@ public class PracticalTest02MainActivity extends AppCompatActivity {
     // Client widgets
     private EditText clientAddressEditText = null;
     private EditText clientPortEditText = null;
-    private EditText cityEditText = null;
-    private Spinner informationTypeSpinner = null;
+    private EditText wordEditText = null;
     private Button getDictionaryWordButton = null;
-    private TextView weatherForecastTextView = null;
+    private TextView dictionaryTextView = null;
 
     private ServerThread serverThread = null;
-//    private ClientThread clientThread = null;
+    private ClientThread clientThread = null;
 
     private ConnectButtonClickListener connectButtonClickListener = new ConnectButtonClickListener();
     private class ConnectButtonClickListener implements Button.OnClickListener {
@@ -67,18 +68,16 @@ public class PracticalTest02MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "[MAIN ACTIVITY] There is no server to connect to!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            String city = cityEditText.getText().toString();
-            String informationType = informationTypeSpinner.getSelectedItem().toString();
-            if (city == null || city.isEmpty()
-                    || informationType == null || informationType.isEmpty()) {
+            String word = wordEditText.getText().toString();
+            if (word == null || word.isEmpty()) {
                 Toast.makeText(getApplicationContext(), "[MAIN ACTIVITY] Parameters from client (city / information type) should be filled", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            weatherForecastTextView.setText(Constants.EMPTY_STRING);
+            dictionaryTextView.setText(Constants.EMPTY_STRING);
 
             clientThread = new ClientThread(
-                    clientAddress, Integer.parseInt(clientPort), city, informationType, weatherForecastTextView
+                    clientAddress, Integer.parseInt(clientPort), word, dictionaryTextView
             );
             clientThread.start();
         }
@@ -97,11 +96,10 @@ public class PracticalTest02MainActivity extends AppCompatActivity {
 
         clientAddressEditText = (EditText)findViewById(R.id.client_address_edit_text);
         clientPortEditText = (EditText)findViewById(R.id.client_port_edit_text);
-        cityEditText = (EditText)findViewById(R.id.city_edit_text);
-        informationTypeSpinner = (Spinner)findViewById(R.id.information_type_spinner);
-        getWeatherForecastButton = (Button)findViewById(R.id.get_weather_forecast_button);
-        getWeatherForecastButton.setOnClickListener(getWeatherForecastButtonClickListener);
-        weatherForecastTextView = (TextView)findViewById(R.id.weather_forecast_text_view);
+        wordEditText = (EditText)findViewById(R.id.city_edit_text);
+        getDictionaryWordButton = (Button)findViewById(R.id.get_dictionary_word_button);
+        getDictionaryWordButton.setOnClickListener(getDictionaryWordButtonClickListener);
+        dictionaryTextView = (TextView)findViewById(R.id.dicitionary_word_text_view);
     }
 
     @Override
